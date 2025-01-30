@@ -1,19 +1,33 @@
-import { format, isToday, isYesterday, differenceInDays } from "date-fns";
+import {
+  format,
+  isToday,
+  isYesterday,
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+} from "date-fns";
 import { vi } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
+import { Pencil } from "lucide-react";
+import { Button } from "./ui/button";
+import { useState } from "react";
+import { EditFeedDialog } from "./EditFeedDialog";
+import type { FeedRecord, FeedRecordUpdate } from "@/types/feed";
 
 interface TimelineProps {
-  feedTimes: Date[];
+  feeds: FeedRecord[];
+  onUpdateFeed: (id: string, updates: FeedRecordUpdate) => void;
 }
 
-export const Timeline = ({ feedTimes }: TimelineProps) => {
+export const Timeline = ({ feeds, onUpdateFeed }: TimelineProps) => {
   const { t, i18n } = useTranslation();
   const now = new Date();
   const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
-  
-  const recentFeeds = feedTimes
-    .filter(time => time > fortyEightHoursAgo)
-    .sort((a, b) => b.getTime() - a.getTime());
+  const [editingFeed, setEditingFeed] = useState<FeedRecord | null>(null);
+
+  const recentFeeds = feeds
+    .filter(feed => feed.time > fortyEightHoursAgo)
+    .sort((a, b) => b.time.getTime() - a.time.getTime());
 
   const formatTimeLabel = (time: Date) => {
     if (isToday(time)) {
@@ -32,6 +46,18 @@ export const Timeline = ({ feedTimes }: TimelineProps) => {
     });
   };
 
+  const formatTimeSinceLastFeed = (currentTime: Date, previousTime: Date | undefined) => {
+    if (!previousTime) return null;
+
+    const hours = differenceInHours(currentTime, previousTime);
+    const minutes = differenceInMinutes(currentTime, previousTime) % 60;
+
+    if (hours === 0) {
+      return t('timeLastFeed', { time: `${minutes} phút` });
+    }
+    return t('timeLastFeed', { time: `${hours} giờ ${minutes} phút` });
+  };
+
   return (
     <div className="w-full max-w-md mx-auto mt-8">
       <h2 className="text-xl font-semibold mb-6 text-baby-purple dark:text-purple-400">
@@ -42,27 +68,50 @@ export const Timeline = ({ feedTimes }: TimelineProps) => {
         {/* Vertical Track */}
         <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-baby-blue/20 dark:bg-blue-600/20" />
         
-        {recentFeeds.map((time, index) => (
-          <div
-            key={time.getTime()}
-            className="relative flex items-center pl-12"
-          >
-            {/* Dot connected to track */}
-            <div className="absolute left-3 w-3 h-3 rounded-full bg-white dark:bg-gray-900 border-4 border-baby-blue dark:border-blue-600" />
-            
-            {/* Time info */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 w-full shadow-sm transition-colors">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-900 dark:text-gray-100 font-medium">
-                  {formatTime(time)}
-                </span>
-                <span className="text-gray-500 dark:text-gray-400 text-sm">
-                  {formatTimeLabel(time)}
-                </span>
+        {recentFeeds.map((feed, index) => {
+          const prevFeed = recentFeeds[index + 1];
+          const timeSinceLastFeed = formatTimeSinceLastFeed(feed.time, prevFeed?.time);
+
+          return (
+            <div
+              key={feed.id}
+              className="relative flex items-center pl-12"
+            >
+              {/* Dot connected to track */}
+              <div className="absolute left-3 w-3 h-3 rounded-full bg-white dark:bg-gray-900 border-4 border-baby-blue dark:border-blue-600" />
+              
+              {/* Feed info */}
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 w-full shadow-sm transition-colors">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-gray-900 dark:text-gray-100 font-medium">
+                    {formatTime(feed.time)}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => setEditingFeed(feed)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-500 dark:text-gray-400">
+                    {formatTimeLabel(feed.time)}
+                  </span>
+                  <span className="font-medium text-baby-blue dark:text-blue-400">
+                    {feed.amount}ml
+                  </span>
+                </div>
+                {timeSinceLastFeed && (
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {timeSinceLastFeed}
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* Empty state */}
         {recentFeeds.length === 0 && (
@@ -71,6 +120,15 @@ export const Timeline = ({ feedTimes }: TimelineProps) => {
           </div>
         )}
       </div>
+
+      {editingFeed && (
+        <EditFeedDialog
+          record={editingFeed}
+          open={true}
+          onOpenChange={(open) => !open && setEditingFeed(null)}
+          onSubmit={onUpdateFeed}
+        />
+      )}
     </div>
   );
 };

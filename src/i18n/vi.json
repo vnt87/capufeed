@@ -8,5 +8,20 @@
   "today": "Hôm nay",
   "yesterday": "Hôm qua",
   "daysAgo": "{{count}} ngày trước",
-  "noRecentFeeds": "Không có cho bú gần đây"
+  "noRecentFeeds": "Không có cho bú gần đây",
+  "enterFeedAmount": "Nhập Lượng Sữa",
+  "amount": "Lượng sữa",
+  "save": "Lưu",
+  "cancel": "Hủy",
+  "edit": "Sửa",
+  "invalidAmount": "Lượng Sữa Không Hợp Lệ",
+  "pleaseEnterValidAmount": "Vui lòng nhập lượng sữa lớn hơn 0 ml",
+  "timeLastFeed": "{{time}} từ lần bú trước",
+  "editRecord": "Sửa Thông Tin",
+  "editTime": "Thời gian",
+  "editAmount": "Lượng sữa (ml)",
+  "invalidTime": "Thời Gian Không Hợp Lệ",
+  "pleaseEnterValidTime": "Vui lòng nhập thời gian hợp lệ (không ở tương lai)",
+  "updateSuccess": "Đã cập nhật thành công",
+  "updateError": "Cập nhật không thành công"
 }

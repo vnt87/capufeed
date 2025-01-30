@@ -8,5 +8,20 @@
   "today": "Today",
   "yesterday": "Yesterday",
   "daysAgo": "{{count}} days ago",
-  "noRecentFeeds": "No recent feeds"
+  "noRecentFeeds": "No recent feeds",
+  "enterFeedAmount": "Enter Feed Amount",
+  "amount": "Amount",
+  "save": "Save",
+  "cancel": "Cancel",
+  "edit": "Edit",
+  "invalidAmount": "Invalid Amount",
+  "pleaseEnterValidAmount": "Please enter a valid amount greater than 0 ml",
+  "timeLastFeed": "{{time}} since last feed",
+  "editRecord": "Edit Record",
+  "editTime": "Time",
+  "editAmount": "Amount (ml)",
+  "invalidTime": "Invalid Time",
+  "pleaseEnterValidTime": "Please enter a valid time (not in the future)",
+  "updateSuccess": "Record updated successfully",
+  "updateError": "Failed to update record"
 }
