@@ -1,0 +1,7 @@
+{
+  "title": "Capu Feeding Tracker",
+  "timeSinceLastFeed": "Time since last feed",
+  "feedButton": "Feed",
+  "feedRecorded": "Feed recorded!",
+  "feedRecordedDesc": "New feeding time has been added to the timeline."
+}
