@@ -1,75 +1,92 @@
-import Database from 'better-sqlite3';
 import type { FeedRecord, FeedRecordUpdate } from '@/types/feed';
 
-interface DbRow {
-  id: string;
-  time: number;
-  amount: number;
+const DB_NAME = 'feed-track';
+const STORE_NAME = 'feeds';
+
+function openDB(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, 1);
+
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+
+    request.onupgradeneeded = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+      }
+    };
+  });
 }
 
-const db = new Database('feeds.db');
-
-// Create feeds table if it doesn't exist
-db.exec(`
-  CREATE TABLE IF NOT EXISTS feeds (
-    id TEXT PRIMARY KEY,
-    time INTEGER NOT NULL,
-    amount INTEGER NOT NULL
-  )
-`);
+async function getStore(mode: IDBTransactionMode = 'readonly'): Promise<IDBObjectStore> {
+  const db = await openDB();
+  const transaction = db.transaction(STORE_NAME, mode);
+  return transaction.objectStore(STORE_NAME);
+}
 
 export const feedsDb = {
-  getAll: (): FeedRecord[] => {
-    const rows = db.prepare('SELECT * FROM feeds').all() as DbRow[];
-    return rows.map(row => ({
-      id: row.id,
-      time: new Date(row.time),
-      amount: row.amount
-    }));
+  getAll: async (): Promise<FeedRecord[]> => {
+    const store = await getStore();
+    return new Promise((resolve, reject) => {
+      const request = store.getAll();
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        // Convert stored timestamps back to Date objects
+        const feeds = request.result.map(feed => ({
+          ...feed,
+          time: new Date(feed.time)
+        }));
+        resolve(feeds);
+      };
+    });
   },
   
-  add: (feed: FeedRecord): FeedRecord => {
-    const stmt = db.prepare(
-      'INSERT INTO feeds (id, time, amount) VALUES (?, ?, ?)'
-    );
-    stmt.run(feed.id, feed.time.getTime(), feed.amount);
-    return feed;
+  add: async (feed: FeedRecord): Promise<FeedRecord> => {
+    const store = await getStore('readwrite');
+    return new Promise((resolve, reject) => {
+      // Store dates as timestamps for better serialization
+      const serializedFeed = {
+        ...feed,
+        time: feed.time.getTime()
+      };
+      const request = store.add(serializedFeed);
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => resolve(feed);
+    });
   },
   
-  update: (id: string, updates: FeedRecordUpdate): void => {
-    const sets: string[] = [];
-    const values: (number | string)[] = [];
-    
-    if (updates.time) {
-      sets.push('time = ?');
-      values.push(updates.time.getTime());
-    }
-    if (typeof updates.amount !== 'undefined') {
-      sets.push('amount = ?');
-      values.push(updates.amount);
-    }
-    values.push(id);
-    
-    if (sets.length > 0) {
-      const stmt = db.prepare(
-        `UPDATE feeds SET ${sets.join(', ')} WHERE id = ?`
-      );
-      stmt.run(...values);
-    }
+  update: async (id: string, updates: FeedRecordUpdate): Promise<void> => {
+    const store = await getStore('readwrite');
+    return new Promise((resolve, reject) => {
+      const getRequest = store.get(id);
+      getRequest.onerror = () => reject(getRequest.error);
+      getRequest.onsuccess = () => {
+        const feed = getRequest.result;
+        if (!feed) {
+          reject(new Error('Feed not found'));
+          return;
+        }
+
+        const updatedFeed = {
+          ...feed,
+          ...updates,
+          time: updates.time ? updates.time.getTime() : feed.time
+        };
+
+        const putRequest = store.put(updatedFeed);
+        putRequest.onerror = () => reject(putRequest.error);
+        putRequest.onsuccess = () => resolve();
+      };
+    });
   },
 
-  getLatest: (): FeedRecord | null => {
-    const row = db.prepare(
-      'SELECT * FROM feeds ORDER BY time DESC LIMIT 1'
-    ).get() as DbRow | undefined;
+  getLatest: async (): Promise<FeedRecord | null> => {
+    const feeds = await feedsDb.getAll();
+    if (feeds.length === 0) return null;
     
-    if (row) {
-      return {
-        id: row.id,
-        time: new Date(row.time),
-        amount: row.amount
-      };
-    }
-    return null;
+    return feeds.reduce((latest, feed) => 
+      feed.time > latest.time ? feed : latest
+    , feeds[0]);
   }
 };

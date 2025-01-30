@@ -19,13 +19,23 @@ const Index = () => {
     return feeds[0]; // Feeds are already sorted by time desc
   };
 
-  const handleFeed = (amount: number) => {
-    addFeed(amount);
+  const handleFeed = async (amount: number) => {
+    await addFeed(amount);
     toast({
       title: t('feedRecorded'),
       description: t('feedRecordedDesc'),
     });
   };
+
+  if (feeds.length === 0) {
+    return (
+      <div className="min-h-screen bg-baby-background dark:bg-gray-900 p-4 transition-colors">
+        <div className="flex items-center justify-center h-full">
+          <div className="text-gray-600 dark:text-gray-400">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-baby-background dark:bg-gray-900 p-4 transition-colors">

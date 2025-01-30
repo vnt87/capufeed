@@ -16,7 +16,7 @@ import type { FeedRecord, FeedRecordUpdate } from "@/types/feed";
 
 interface TimelineProps {
   feeds: FeedRecord[];
-  onUpdateFeed: (id: string, updates: FeedRecordUpdate) => void;
+  onUpdateFeed: (id: string, updates: FeedRecordUpdate) => Promise<void>;
 }
 
 export const Timeline = ({ feeds, onUpdateFeed }: TimelineProps) => {
@@ -90,7 +90,11 @@ export const Timeline = ({ feeds, onUpdateFeed }: TimelineProps) => {
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() => setEditingFeed(feed)}
+                    onClick={() => {
+            if (!editingFeed) {
+              setEditingFeed(feed);
+            }
+          }}
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>

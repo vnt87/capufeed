@@ -17,7 +17,7 @@ interface EditFeedDialogProps {
   record: FeedRecord;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (id: string, updates: FeedRecordUpdate) => void;
+  onSubmit: (id: string, updates: FeedRecordUpdate) => Promise<void>;
 }
 
 const formatForInput = (date: Date) => {
@@ -35,7 +35,7 @@ export function EditFeedDialog({ record, open, onOpenChange, onSubmit }: EditFee
   const [time, setTime] = useState(formatForInput(record.time));
   const [amount, setAmount] = useState(String(record.amount));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const numAmount = Number(amount);
     const newTime = new Date(time);
@@ -59,11 +59,19 @@ export function EditFeedDialog({ record, open, onOpenChange, onSubmit }: EditFee
       return;
     }
 
-    onSubmit(record.id, {
-      time: newTime,
-      amount: numAmount,
-    });
-    onOpenChange(false);
+    try {
+      await onSubmit(record.id, {
+        time: newTime,
+        amount: numAmount,
+      });
+      onOpenChange(false);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: t("updateError"),
+        description: error instanceof Error ? error.message : t("updateError"),
+      });
+    }
   };
 
   return (
