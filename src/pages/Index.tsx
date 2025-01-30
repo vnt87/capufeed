@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Header } from "@/components/Header";
 import { FeedDialog } from "@/components/FeedDialog";
+import { CurrentTime } from "@/components/CurrentTime";
 import type { FeedRecord, FeedRecordUpdate } from "@/types/feed";
 
 const generateId = () => Math.random().toString(36).slice(2);
@@ -63,9 +64,12 @@ const Index = () => {
           {t('title')}
         </h1>
         
-        <div className="text-center space-y-2">
-          <p className="text-gray-600 dark:text-gray-400">{t('timeSinceLastFeed')}</p>
-          <Timer lastFeedTime={getLastFeed().time} />
+        <div className="text-center space-y-4">
+          <CurrentTime />
+          <div className="space-y-2">
+            <p className="text-gray-600 dark:text-gray-400">{t('timeSinceLastFeed')}</p>
+            <Timer lastFeedTime={getLastFeed().time} />
+          </div>
         </div>
 
         <div className="text-center">

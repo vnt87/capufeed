@@ -8,7 +8,7 @@ import {
 } from "date-fns";
 import { vi } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
-import { Pencil } from "lucide-react";
+import { Pencil, Milk } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { EditFeedDialog } from "./EditFeedDialog";
@@ -99,7 +99,8 @@ export const Timeline = ({ feeds, onUpdateFeed }: TimelineProps) => {
                   <span className="text-gray-500 dark:text-gray-400">
                     {formatTimeLabel(feed.time)}
                   </span>
-                  <span className="font-medium text-baby-blue dark:text-blue-400">
+                  <span className="font-medium text-baby-blue dark:text-blue-400 flex items-center gap-1">
+                    <Milk className="h-4 w-4" />
                     {feed.amount}ml
                   </span>
                 </div>

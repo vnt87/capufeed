@@ -1,10 +1,11 @@
 {
-  "title": "Theo Dõi Bú Capu",
+  "currentTime": "Thời Gian",
+  "title": "Cho Capu Bú",
   "timeSinceLastFeed": "Thời gian từ lần bú cuối",
   "feedButton": "Cho bú",
   "feedRecorded": "Đã ghi nhận!",
   "feedRecordedDesc": "Thời gian cho bú mới đã được thêm vào dòng thời gian.",
-  "recentFeeds": "Cho Bú Gần Đây",
+  "recentFeeds": "Cho Bú Gần Nhất",
   "today": "Hôm nay",
   "yesterday": "Hôm qua",
   "daysAgo": "{{count}} ngày trước",

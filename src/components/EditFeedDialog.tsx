@@ -20,12 +20,19 @@ interface EditFeedDialogProps {
   onSubmit: (id: string, updates: FeedRecordUpdate) => void;
 }
 
+const formatForInput = (date: Date) => {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
 export function EditFeedDialog({ record, open, onOpenChange, onSubmit }: EditFeedDialogProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [time, setTime] = useState(
-    record.time.toISOString().slice(0, 16) // Format: "YYYY-MM-DDTHH:mm"
-  );
+  const [time, setTime] = useState(formatForInput(record.time));
   const [amount, setAmount] = useState(String(record.amount));
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -77,7 +84,7 @@ export function EditFeedDialog({ record, open, onOpenChange, onSubmit }: EditFee
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 className="mt-2"
-                max={new Date().toISOString().slice(0, 16)}
+                max={formatForInput(new Date())}
               />
             </div>
             <div>
