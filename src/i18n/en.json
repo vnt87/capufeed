@@ -24,5 +24,7 @@
   "invalidTime": "Invalid Time",
   "pleaseEnterValidTime": "Please enter a valid time (not in the future)",
   "updateSuccess": "Record updated successfully",
-  "updateError": "Failed to update record"
+  "updateError": "Failed to update record",
+  "timerAlertTooltip": "2 hours passed! Remember to warm the bottle!",
+  "timerDangerTooltip": "4 hours passed! Has Capu been fed?"
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { ShieldAlert, AlertTriangle } from "lucide-react";
 import {
   Tooltip,
@@ -13,6 +14,7 @@ interface TimerProps {
 }
 
 export const Timer = ({ lastFeedTime }: TimerProps) => {
+  const { t } = useTranslation();
   const [elapsedTime, setElapsedTime] = useState("00:00:00");
   const [hours, setHours] = useState(0);
 
@@ -63,8 +65,8 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
         <TooltipContent>
           <p>
             {hours >= 4 
-              ? "4 hours passed! Has Capu been fed?"
-              : "2 hours passed! Remember to warm the bottle!"}
+              ? t("timerDangerTooltip")
+              : t("timerAlertTooltip")}
           </p>
         </TooltipContent>
       </Tooltip>

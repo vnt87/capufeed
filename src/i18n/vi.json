@@ -24,5 +24,7 @@
   "invalidTime": "Thời Gian Không Hợp Lệ",
   "pleaseEnterValidTime": "Vui lòng nhập thời gian hợp lệ (không ở tương lai)",
   "updateSuccess": "Đã cập nhật thành công",
-  "updateError": "Cập nhật không thành công"
+  "updateError": "Cập nhật không thành công",
+  "timerAlertTooltip": "Đã 2 tiếng! Nhớ hâm nóng bình sữa!",
+  "timerDangerTooltip": "Đã 4 tiếng! Capu đã bú chưa?"
 }
