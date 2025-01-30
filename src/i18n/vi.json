@@ -3,5 +3,10 @@
   "timeSinceLastFeed": "Thời gian từ lần bú cuối",
   "feedButton": "Cho bú",
   "feedRecorded": "Đã ghi nhận!",
-  "feedRecordedDesc": "Thời gian cho bú mới đã được thêm vào dòng thời gian."
+  "feedRecordedDesc": "Thời gian cho bú mới đã được thêm vào dòng thời gian.",
+  "recentFeeds": "Cho Bú Gần Đây",
+  "today": "Hôm nay",
+  "yesterday": "Hôm qua",
+  "daysAgo": "{{count}} ngày trước",
+  "noRecentFeeds": "Không có cho bú gần đây"
 }

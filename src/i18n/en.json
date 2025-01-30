@@ -3,5 +3,10 @@
   "timeSinceLastFeed": "Time since last feed",
   "feedButton": "Feed",
   "feedRecorded": "Feed recorded!",
-  "feedRecordedDesc": "New feeding time has been added to the timeline."
+  "feedRecordedDesc": "New feeding time has been added to the timeline.",
+  "recentFeeds": "Recent Feeds",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "daysAgo": "{{count}} days ago",
+  "noRecentFeeds": "No recent feeds"
 }
