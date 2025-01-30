@@ -7,52 +7,23 @@ import { useToast } from "@/components/ui/use-toast";
 import { Header } from "@/components/Header";
 import { FeedDialog } from "@/components/FeedDialog";
 import { CurrentTime } from "@/components/CurrentTime";
-import type { FeedRecord, FeedRecordUpdate } from "@/types/feed";
-
-const generateId = () => Math.random().toString(36).slice(2);
+import { useFeedStore } from "@/hooks/use-feed-store";
 
 const Index = () => {
-  const [feeds, setFeeds] = useState<FeedRecord[]>([{
-    id: generateId(),
-    time: new Date(),
-    amount: 120
-  }]);
+  const { feeds, addFeed, updateFeed } = useFeedStore();
   const [feedDialogOpen, setFeedDialogOpen] = useState(false);
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  const getLastFeed = () => {
-    return feeds.reduce((latest, feed) => 
-      feed.time > latest.time ? feed : latest
-    , feeds[0]);
+  const getLatestFeed = () => {
+    return feeds[0]; // Feeds are already sorted by time desc
   };
 
   const handleFeed = (amount: number) => {
-    const newFeed: FeedRecord = {
-      id: generateId(),
-      time: new Date(),
-      amount
-    };
-    setFeeds([...feeds, newFeed]);
+    addFeed(amount);
     toast({
       title: t('feedRecorded'),
       description: t('feedRecordedDesc'),
-    });
-  };
-
-  const handleUpdateFeed = (id: string, updates: FeedRecordUpdate) => {
-    setFeeds(currentFeeds => {
-      const newFeeds = currentFeeds.map(feed => 
-        feed.id === id 
-          ? { ...feed, ...updates }
-          : feed
-      );
-      // Sort feeds by time
-      newFeeds.sort((a, b) => b.time.getTime() - a.time.getTime());
-      return newFeeds;
-    });
-    toast({
-      title: t('updateSuccess'),
     });
   };
 
@@ -68,7 +39,7 @@ const Index = () => {
           <CurrentTime />
           <div className="space-y-2">
             <p className="text-gray-600 dark:text-gray-400">{t('timeSinceLastFeed')}</p>
-            <Timer lastFeedTime={getLastFeed().time} />
+            <Timer lastFeedTime={getLatestFeed().time} />
           </div>
         </div>
 
@@ -83,7 +54,7 @@ const Index = () => {
 
         <Timeline
           feeds={feeds}
-          onUpdateFeed={handleUpdateFeed}
+          onUpdateFeed={updateFeed}
         />
 
         <FeedDialog
