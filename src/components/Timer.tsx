@@ -1,4 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
+import { ShieldAlert, AlertTriangle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 interface TimerProps {
   lastFeedTime: Date;
@@ -6,6 +14,7 @@ interface TimerProps {
 
 export const Timer = ({ lastFeedTime }: TimerProps) => {
   const [elapsedTime, setElapsedTime] = useState("00:00:00");
+  const [hours, setHours] = useState(0);
 
   const updateTimer = useCallback(() => {
     const now = new Date();
@@ -15,6 +24,7 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
+    setHours(hours);
     setElapsedTime(
       `${hours.toString().padStart(2, "0")}:${minutes
         .toString()
@@ -30,8 +40,34 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
   }, [updateTimer]);
 
   return (
-    <div className="text-5xl md:text-6xl font-bold text-baby-purple tracking-wider">
-      {elapsedTime}
-    </div>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="w-full flex justify-center">
+            <div className="flex items-center gap-2">
+            <div
+              className={cn(
+                "text-5xl md:text-6xl font-bold tracking-wider",
+                hours >= 4 ? "text-destructive" :
+                hours >= 2 ? "text-amber-500" :
+                "text-baby-purple"
+              )}
+            >
+              {elapsedTime}
+            </div>
+            {hours >= 4 && <AlertTriangle className="h-8 w-8 text-destructive" />}
+            {hours >= 2 && hours < 4 && <ShieldAlert className="h-8 w-8 text-amber-500" />}
+            </div>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>
+            {hours >= 4 
+              ? "4 hours passed! Has Capu been fed?"
+              : "2 hours passed! Remember to warm the bottle!"}
+          </p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
