@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Timer } from "@/components/Timer";
 import { Timeline } from "@/components/Timeline";
+import { Chart } from "@/components/Chart";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Header } from "@/components/Header";
@@ -62,10 +64,21 @@ const Index = () => {
           </Button>
         </div>
 
-        <Timeline
-          feeds={feeds}
-          onUpdateFeed={updateFeed}
-        />
+        <Tabs defaultValue="timeline">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="timeline">{t('recentFeeds')}</TabsTrigger>
+            <TabsTrigger value="chart">{t('chart')}</TabsTrigger>
+          </TabsList>
+          <TabsContent value="timeline">
+            <Timeline
+              feeds={feeds}
+              onUpdateFeed={updateFeed}
+            />
+          </TabsContent>
+          <TabsContent value="chart">
+            <Chart feeds={feeds} />
+          </TabsContent>
+        </Tabs>
 
         <FeedDialog
           open={feedDialogOpen}
