@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS feeds (
+  id TEXT PRIMARY KEY,
+  time INTEGER NOT NULL,
+  amount INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_feeds_time ON feeds(time DESC);
