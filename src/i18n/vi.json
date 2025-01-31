@@ -27,5 +27,7 @@
   "updateError": "Cập nhật không thành công",
   "timerAlertTooltip": "Đã 2 tiếng! Nhớ hâm nóng bình sữa!",
   "timerDangerTooltip": "Đã 4 tiếng! Capu đã bú chưa?",
-  "chart": "Biểu Đồ"
+  "chart": "Biểu Đồ",
+  "totalAmount": "Tổng: {{amount}}ml",
+  "feedCount": "{{count}} lần bú"
 }
