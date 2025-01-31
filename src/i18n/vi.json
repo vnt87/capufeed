@@ -25,8 +25,8 @@
   "pleaseEnterValidTime": "Vui lòng nhập thời gian hợp lệ (không ở tương lai)",
   "updateSuccess": "Đã cập nhật thành công",
   "updateError": "Cập nhật không thành công",
-  "timerAlertTooltip": "Đã 2 tiếng! Nhớ hâm nóng bình sữa!",
-  "timerDangerTooltip": "Đã 4 tiếng! Capu đã bú chưa?",
+  "timerAlertTooltip": "Đã qua 2 tiếng! Nhớ hâm nóng bình sữa!",
+  "timerDangerTooltip": "Đã qua 4 tiếng! Capu đã bú chưa?",
   "chart": "Biểu Đồ",
   "totalAmount": "Tổng: {{amount}}ml",
   "feedCount": "{{count}} lần bú"

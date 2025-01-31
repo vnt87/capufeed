@@ -1,12 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { ShieldAlert, AlertTriangle } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface TimerProps {
@@ -42,34 +37,29 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
   }, [updateTimer]);
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className="w-full flex justify-center">
-            <div className="flex items-center gap-2">
-            <div
-              className={cn(
-                "text-5xl md:text-6xl font-bold tracking-wider",
-                hours >= 4 ? "text-destructive" :
-                hours >= 2 ? "text-amber-500" :
-                "text-baby-purple"
-              )}
-            >
-              {elapsedTime}
-            </div>
-            {hours >= 4 && <AlertTriangle className="h-8 w-8 text-destructive" />}
-            {hours >= 2 && hours < 4 && <ShieldAlert className="h-8 w-8 text-amber-500" />}
-            </div>
-          </div>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>
-            {hours >= 4 
-              ? t("timerDangerTooltip")
-              : t("timerAlertTooltip")}
-          </p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <div className="flex flex-col items-center">
+      <div
+        className={cn(
+          "text-5xl md:text-6xl font-bold tracking-wider",
+          hours >= 4 ? "text-destructive" :
+          hours >= 2 ? "text-amber-500" :
+          "text-baby-purple"
+        )}
+      >
+        {elapsedTime}
+      </div>
+      
+      {hours >= 4 ? (
+        <Badge variant="destructive" className="mt-2">
+          <AlertTriangle className="h-4 w-4 mr-1" />
+          {t("timerDangerTooltip")}
+        </Badge>
+      ) : hours >= 2 ? (
+        <Badge variant="default" className="mt-2 bg-amber-500 text-white">
+          <ShieldAlert className="h-4 w-4 mr-1" />
+          {t("timerAlertTooltip")}
+        </Badge>
+      ) : null}
+    </div>
   );
 };
