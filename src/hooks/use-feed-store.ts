@@ -29,10 +29,10 @@ export function useFeedStore() {
     loadFeeds();
   }, []);
 
-  const addFeed = useCallback(async (amount: number) => {
+  const addFeed = useCallback(async (amount: number, time: Date = new Date()) => {
     const newFeed: FeedRecord = {
       id: generateId(),
-      time: new Date(),
+      time,
       amount
     };
     await feedsDb.add(newFeed);

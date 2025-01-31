@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Dialog,
@@ -10,6 +10,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useToast } from "@/components/ui/use-toast";
 import type { FeedRecord, FeedRecordUpdate } from "@/types/feed";
 
@@ -20,25 +25,16 @@ interface EditFeedDialogProps {
   onSubmit: (id: string, updates: FeedRecordUpdate) => Promise<void>;
 }
 
-const formatForInput = (date: Date) => {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${year}-${month}-${day}T${hours}:${minutes}`;
-};
-
 export function EditFeedDialog({ record, open, onOpenChange, onSubmit }: EditFeedDialogProps) {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [time, setTime] = useState(formatForInput(record.time));
+  const [date, setDate] = useState(record.time);
+  const isMobile = useIsMobile();
   const [amount, setAmount] = useState(String(record.amount));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const numAmount = Number(amount);
-    const newTime = new Date(time);
     const now = new Date();
     
     if (!amount || isNaN(numAmount) || numAmount <= 0) {
@@ -50,7 +46,7 @@ export function EditFeedDialog({ record, open, onOpenChange, onSubmit }: EditFee
       return;
     }
 
-    if (isNaN(newTime.getTime()) || newTime > now) {
+    if (date > now) {
       toast({
         variant: "destructive",
         title: t("invalidTime"),
@@ -61,7 +57,7 @@ export function EditFeedDialog({ record, open, onOpenChange, onSubmit }: EditFee
 
     try {
       await onSubmit(record.id, {
-        time: newTime,
+        time: date,
         amount: numAmount,
       });
       onOpenChange(false);
@@ -76,24 +72,45 @@ export function EditFeedDialog({ record, open, onOpenChange, onSubmit }: EditFee
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className={isMobile ? "translate-y-[-20%]" : ""}>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>{t("editRecord")}</DialogTitle>
           </DialogHeader>
           <div className="py-6 space-y-4">
-            <div>
-              <Label htmlFor="time">
-                {t("editTime")}
-              </Label>
-              <Input
-                id="time"
-                type="datetime-local"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                className="mt-2"
-                max={formatForInput(new Date())}
-              />
+            <div className="space-y-2">
+              <Label>{t("editTime")}</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start text-left font-normal"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {format(date, "PPpp")}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={(date) => date && setDate(date)}
+                    initialFocus
+                  />
+                  <div className="p-3 border-t border-border">
+                    <Input
+                      type="time"
+                      value={format(date, "HH:mm")}
+                      onChange={(e) => {
+                        const [hours, minutes] = e.target.value.split(":");
+                        const newDate = new Date(date);
+                        newDate.setHours(parseInt(hours), parseInt(minutes));
+                        setDate(newDate);
+                      }}
+                    />
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
             <div>
               <Label htmlFor="editAmount">

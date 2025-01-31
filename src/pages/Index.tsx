@@ -21,8 +21,8 @@ const Index = () => {
     return feeds[0]; // Feeds are already sorted by time desc
   };
 
-  const handleFeed = async (amount: number) => {
-    await addFeed(amount);
+  const handleFeed = async (amount: number, time: Date) => {
+    await addFeed(amount, time);
     toast({
       title: t('feedRecorded'),
       description: t('feedRecordedDesc'),
