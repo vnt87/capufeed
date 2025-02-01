@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -26,6 +27,7 @@ export function SettingsDialog({
 }: SettingsDialogProps) {
   const { t } = useTranslation();
   const { name, setName } = useName();
+  const isMobile = useIsMobile();
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -33,7 +35,7 @@ export function SettingsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] md:translate-y-0 translate-y-[calc(var(--mobile-keyboard-height,0px)*-1)]">
+      <DialogContent className={`sm:max-w-[425px] ${isMobile ? "translate-y-[-20%]" : ""}`}>
         <DialogHeader>
           <DialogTitle>{t('settings')}</DialogTitle>
           <DialogDescription>
