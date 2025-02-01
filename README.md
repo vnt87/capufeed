@@ -1,11 +1,6 @@
 # Capufeed
 
-Capufeed is a feed-tracking application that allows users to manage and analyze incoming data from various sources in multiple languages.
-
-## Tech Stack
-
-- Node.js, Express, TypeScript
-- React, Redux (or similar state management)
+This is a feeding tracker I made for my baby daughter (Capu).
 
 ## Multi-language Support
 
