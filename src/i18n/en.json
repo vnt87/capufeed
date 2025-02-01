@@ -38,5 +38,9 @@
   "darkMode": "Dark Mode",
   "lightMode": "Light Mode",
   "language": "Language",
-  "appearance": "Appearance"
+  "appearance": "Appearance",
+  "data": "Data Management",
+  "export": "Export",
+  "import": "Import",
+  "invalidFile": "Invalid file format. Please upload a valid timeline JSON file."
 }

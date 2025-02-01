@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useName } from '@/contexts/NameContext';
 import { US, VN } from 'country-flag-icons/react/3x2';
-import { Moon, Sun } from 'lucide-react';
+import { Download, Moon, Sun, Upload } from 'lucide-react';
+import { feedsDb } from '@/lib/db';
 
 interface SettingsDialogProps {
   open: boolean;
@@ -55,45 +56,111 @@ export function SettingsDialog({
           </div>
           
           <div className="grid gap-2">
-            <Label>{t('language')}</Label>
-            <Button
-              variant="outline"
-              className="flex justify-start gap-2 w-full"
-              onClick={toggleLanguage}
-            >
-              {language === 'en' ? (
-                <>
-                  <US className="h-4 w-4" />
-                  <span>English</span>
-                </>
-              ) : (
-                <>
-                  <VN className="h-4 w-4" />
-                  <span>Tiếng Việt</span>
-                </>
-              )}
-            </Button>
+            <div className="flex justify-between gap-2">
+              <div className="flex-1">
+                <Label>{t('language')}</Label>
+                <Button
+                  variant="outline"
+                  className="flex justify-start gap-2 w-full mt-2"
+                  onClick={toggleLanguage}
+                >
+                  {language === 'en' ? (
+                    <>
+                      <US className="h-4 w-4" />
+                      <span>English</span>
+                    </>
+                  ) : (
+                    <>
+                      <VN className="h-4 w-4" />
+                      <span>Tiếng Việt</span>
+                    </>
+                  )}
+                </Button>
+              </div>
+              <div className="flex-1">
+                <Label>{t('appearance')}</Label>
+                <Button
+                  variant="outline"
+                  className="flex justify-start gap-2 w-full mt-2"
+                  onClick={toggleTheme}
+                >
+                  {theme === 'light' ? (
+                    <>
+                      <Moon className="h-4 w-4" />
+                      <span>{t('darkMode')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sun className="h-4 w-4" />
+                      <span>{t('lightMode')}</span>
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
           </div>
 
           <div className="grid gap-2">
-            <Label>{t('appearance')}</Label>
-            <Button
-              variant="outline"
-              className="flex justify-start gap-2 w-full"
-              onClick={toggleTheme}
-            >
-              {theme === 'light' ? (
-                <>
-                  <Moon className="h-4 w-4" />
-                  <span>{t('darkMode')}</span>
-                </>
-              ) : (
-                <>
-                  <Sun className="h-4 w-4" />
-                  <span>{t('lightMode')}</span>
-                </>
-              )}
-            </Button>
+            <Label>{t('data')}</Label>
+            <div className="flex gap-2">
+              <Button
+                variant="secondary"
+                className="flex gap-2 flex-1"
+                onClick={async () => {
+                  const feeds = await feedsDb.getAll();
+                  const serializedFeeds = feeds.map(f => ({
+                    ...f,
+                    time: f.time.getTime()
+                  }));
+                  const blob = new Blob([JSON.stringify(serializedFeeds, null, 2)], { type: 'application/json' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'timeline.json';
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+              >
+                <Download className="h-4 w-4" />
+                {t('export')}
+              </Button>
+              <Button
+                variant="secondary"
+                className="flex gap-2 flex-1"
+                onClick={() => {
+                  const input = document.createElement('input');
+                  input.type = 'file';
+                  input.accept = '.json';
+                  input.onchange = async (e) => {
+                    const file = (e.target as HTMLInputElement).files?.[0];
+                    if (!file) return;
+
+                    try {
+                      const text = await file.text();
+                      const data = JSON.parse(text);
+                      
+                      // Validate data structure
+                      if (!Array.isArray(data)) throw new Error('Invalid data format');
+                      
+                      for (const item of data) {
+                        if (!item.id || !item.time || typeof item.amount !== 'number') {
+                          throw new Error('Invalid data structure');
+                        }
+                      }
+
+                      localStorage.setItem('feed-track-feeds', text);
+                      window.location.reload(); // Reload to reflect changes
+                    } catch (error) {
+                      alert(t('invalidFile'));
+                    }
+                  };
+                  input.click();
+                }}
+              >
+                <Upload className="h-4 w-4" />
+                {t('import')}
+              </Button>
+            </div>
           </div>
         </div>
         
