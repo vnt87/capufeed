@@ -1,6 +1,6 @@
 {
   "currentTime": "Current Time",
-  "title": "Capu Feeding Tracker",
+  "title": "{{name}} Feeding Tracker",
   "timeSinceLastFeed": "Time since last feed",
   "feedButton": "Feed",
   "feedRecorded": "Feed recorded!",
@@ -26,8 +26,15 @@
   "updateSuccess": "Record updated successfully",
   "updateError": "Failed to update record",
   "timerAlertTooltip": "2 hours passed! Time to warm the bottle!",
-  "timerDangerTooltip": "4 hours passed! Has Capu been fed?",
+  "timerDangerTooltip": "4 hours passed! Has {{name}} been fed?",
   "chart": "Chart",
   "totalAmount": "Total: {{amount}}ml",
-  "feedCount": "{{count}} feeds"
+  "feedCount": "{{count}} feeds",
+  "settings": "Settings",
+  "settingsDescription": "Configure your app preferences",
+  "babyName": "Baby's Name",
+  "enterBabyName": "Enter baby's name",
+  "close": "Close",
+  "darkMode": "Dark Mode",
+  "lightMode": "Light Mode"
 }

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useName } from "@/contexts/NameContext";
 import { Milk } from "lucide-react";
 import { Timer } from "@/components/Timer";
 import { Timeline } from "@/components/Timeline";
@@ -17,6 +18,12 @@ const Index = () => {
   const [feedDialogOpen, setFeedDialogOpen] = useState(false);
   const { toast } = useToast();
   const { t } = useTranslation();
+  const { name } = useName();
+
+  // Update document title when name or language changes
+  useEffect(() => {
+    document.title = t('title', { name });
+  }, [t, name]);
 
   const getLatestFeed = () => {
     return feeds[0]; // Feeds are already sorted by time desc
@@ -45,7 +52,7 @@ const Index = () => {
       <Header />
       <div className="max-w-md mx-auto space-y-8">
         <h1 className="text-3xl font-bold text-center text-baby-purple dark:text-purple-400 mt-8">
-          {t('title')}
+          {t('title', { name })}
         </h1>
         
         <div className="text-center space-y-4">

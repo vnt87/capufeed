@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { useName } from "@/contexts/NameContext";
 import { ShieldAlert, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -10,6 +11,7 @@ interface TimerProps {
 
 export const Timer = ({ lastFeedTime }: TimerProps) => {
   const { t } = useTranslation();
+  const { name } = useName();
   const [elapsedTime, setElapsedTime] = useState("00:00:00");
   const [hours, setHours] = useState(0);
 
@@ -52,7 +54,7 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
       {hours >= 4 ? (
         <Badge variant="destructive" className="mt-2">
           <AlertTriangle className="h-4 w-4 mr-1" />
-          {t("timerDangerTooltip")}
+          {t("timerDangerTooltip", { name })}
         </Badge>
       ) : hours >= 2 ? (
         <Badge variant="default" className="mt-2 bg-amber-500 text-white">

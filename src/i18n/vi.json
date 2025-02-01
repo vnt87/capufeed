@@ -1,6 +1,6 @@
 {
   "currentTime": "Thời Gian",
-  "title": "Cho Capu Bú",
+  "title": "Cho {{name}} Bú",
   "timeSinceLastFeed": "Thời gian từ lần bú cuối",
   "feedButton": "Cho bú",
   "feedRecorded": "Đã ghi nhận!",
@@ -26,8 +26,15 @@
   "updateSuccess": "Đã cập nhật thành công",
   "updateError": "Cập nhật không thành công",
   "timerAlertTooltip": "Đã qua 2 tiếng! Nhớ hâm nóng bình sữa!",
-  "timerDangerTooltip": "Đã qua 4 tiếng! Capu đã bú chưa?",
+  "timerDangerTooltip": "Đã qua 4 tiếng! {{name}} đã bú chưa?",
   "chart": "Biểu Đồ",
   "totalAmount": "Tổng: {{amount}}ml",
-  "feedCount": "{{count}} lần bú"
+  "feedCount": "{{count}} lần bú",
+  "settings": "Cài Đặt",
+  "settingsDescription": "Tùy chỉnh cài đặt ứng dụng",
+  "babyName": "Tên Bé",
+  "enterBabyName": "Nhập tên của bé",
+  "close": "Đóng",
+  "darkMode": "Chế Độ Tối",
+  "lightMode": "Chế Độ Sáng"
 }
