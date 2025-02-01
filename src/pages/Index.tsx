@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Milk } from "lucide-react";
 import { Timer } from "@/components/Timer";
 import { Timeline } from "@/components/Timeline";
 import { Chart } from "@/components/Chart";
@@ -55,11 +56,12 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="text-center">
+        <div className="flex justify-center">
           <Button
             onClick={() => setFeedDialogOpen(true)}
-            className="bg-baby-blue hover:bg-baby-purple dark:bg-blue-600 dark:hover:bg-purple-600 text-white px-8 py-6 text-xl rounded-full transition-colors"
+            className="bg-baby-blue hover:bg-baby-purple dark:bg-blue-600 dark:hover:bg-purple-600 text-white px-8 py-6 text-xl rounded-full transition-colors flex items-center gap-2 justify-center"
           >
+            <Milk className="w-6 h-6" />
             {t('feedButton')}
           </Button>
         </div>
