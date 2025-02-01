@@ -14,6 +14,7 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
   const { name } = useName();
   const [elapsedTime, setElapsedTime] = useState("00:00:00");
   const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
 
   const updateTimer = useCallback(() => {
     const now = new Date();
@@ -24,6 +25,7 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
     setHours(hours);
+    setMinutes(minutes);
     setElapsedTime(
       `${hours.toString().padStart(2, "0")}:${minutes
         .toString()
@@ -44,7 +46,7 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
         className={cn(
           "text-5xl md:text-6xl font-bold tracking-wider",
           hours >= 4 ? "text-destructive" :
-          hours >= 2 ? "text-amber-500" :
+          (hours + minutes / 60) >= 2.75 ? "text-amber-500" :
           "text-baby-purple"
         )}
       >
@@ -56,7 +58,7 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
           <AlertTriangle className="h-4 w-4 mr-1" />
           {t("timerDangerTooltip", { name })}
         </Badge>
-      ) : hours >= 2 ? (
+      ) : (hours + minutes / 60) >= 2.75 ? (
         <Badge variant="default" className="mt-2 bg-amber-500 text-white">
           <ShieldAlert className="h-4 w-4 mr-1" />
           {t("timerAlertTooltip")}
