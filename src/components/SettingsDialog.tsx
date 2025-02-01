@@ -1,16 +1,29 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useName } from '@/contexts/NameContext';
+import { US, VN } from 'country-flag-icons/react/3x2';
+import { Moon, Sun } from 'lucide-react';
 
 interface SettingsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+  language: string;
+  toggleLanguage: () => void;
 }
 
-export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
+export function SettingsDialog({ 
+  open, 
+  onOpenChange,
+  theme,
+  toggleTheme,
+  language,
+  toggleLanguage
+}: SettingsDialogProps) {
   const { t } = useTranslation();
   const { name, setName } = useName();
 
@@ -20,7 +33,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] md:translate-y-0 translate-y-[calc(var(--mobile-keyboard-height,0px)*-1)]">
         <DialogHeader>
           <DialogTitle>{t('settings')}</DialogTitle>
           <DialogDescription>
@@ -38,12 +51,58 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
               maxLength={50}
             />
           </div>
+          
+          <div className="grid gap-2">
+            <Label>{t('language')}</Label>
+            <Button
+              variant="outline"
+              className="flex justify-start gap-2 w-full"
+              onClick={toggleLanguage}
+            >
+              {language === 'en' ? (
+                <>
+                  <US className="h-4 w-4" />
+                  <span>English</span>
+                </>
+              ) : (
+                <>
+                  <VN className="h-4 w-4" />
+                  <span>Tiếng Việt</span>
+                </>
+              )}
+            </Button>
+          </div>
+
+          <div className="grid gap-2">
+            <Label>{t('appearance')}</Label>
+            <Button
+              variant="outline"
+              className="flex justify-start gap-2 w-full"
+              onClick={toggleTheme}
+            >
+              {theme === 'light' ? (
+                <>
+                  <Moon className="h-4 w-4" />
+                  <span>{t('darkMode')}</span>
+                </>
+              ) : (
+                <>
+                  <Sun className="h-4 w-4" />
+                  <span>{t('lightMode')}</span>
+                </>
+              )}
+            </Button>
+          </div>
         </div>
-        <div className="flex flex-col gap-2">
+        
+        <DialogFooter>
           <Button variant="outline" type="button" onClick={() => onOpenChange(false)}>
-            {t('close')}
+            {t('cancel')}
           </Button>
-        </div>
+          <Button type="button" onClick={() => onOpenChange(false)}>
+            {t('save')}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

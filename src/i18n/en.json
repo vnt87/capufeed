@@ -36,5 +36,7 @@
   "enterBabyName": "Enter baby's name",
   "close": "Close",
   "darkMode": "Dark Mode",
-  "lightMode": "Light Mode"
+  "lightMode": "Light Mode",
+  "language": "Language",
+  "appearance": "Appearance"
 }
