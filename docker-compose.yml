@@ -1,0 +1,6 @@
+services:
+  capufeed:
+    image: ghcr.io/vnt87/capufeed:latest
+    ports:
+      - "2345:80"
+    restart: always
