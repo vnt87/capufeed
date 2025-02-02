@@ -61,7 +61,7 @@ export function SettingsDialog({
                 <Label>{t('language')}</Label>
                 <Button
                   variant="outline"
-                  className="flex justify-start gap-2 w-full mt-2"
+                  className="flex justify-center gap-2 w-full mt-2"
                   onClick={toggleLanguage}
                 >
                   {language === 'en' ? (
@@ -81,7 +81,7 @@ export function SettingsDialog({
                 <Label>{t('appearance')}</Label>
                 <Button
                   variant="outline"
-                  className="flex justify-start gap-2 w-full mt-2"
+                  className="flex justify-center gap-2 w-full mt-2"
                   onClick={toggleTheme}
                 >
                   {theme === 'light' ? (
