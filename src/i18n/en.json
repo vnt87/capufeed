@@ -42,5 +42,7 @@
   "data": "Data Management",
   "export": "Export",
   "import": "Import",
-  "invalidFile": "Invalid file format. Please upload a valid timeline JSON file."
+  "invalidFile": "Invalid file format. Please upload a valid timeline JSON file.",
+  "minutesFormat": "{{minutes}} minutes",
+  "hoursMinutesFormat": "{{hours}} hours {{minutes}} minutes"
 }

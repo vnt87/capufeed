@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Dialog,
@@ -28,6 +28,12 @@ export function FeedDialog({ open, onOpenChange, onSubmit }: FeedDialogProps) {
   const { toast } = useToast();
   const [amount, setAmount] = useState<string>("120");
   const [date, setDate] = useState<Date>(new Date());
+
+  useEffect(() => {
+    if (open) {
+      setDate(new Date());
+    }
+  }, [open]);
   const isMobile = useIsMobile();
 
   const handleSubmit = (e: React.FormEvent) => {

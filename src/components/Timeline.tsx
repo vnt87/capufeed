@@ -6,7 +6,7 @@ import {
   differenceInHours,
   differenceInMinutes,
 } from "date-fns";
-import { vi } from "date-fns/locale";
+import { enUS, vi } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 import { Pencil, Milk } from "lucide-react";
 import { Button } from "./ui/button";
@@ -42,7 +42,7 @@ export const Timeline = ({ feeds, onUpdateFeed }: TimelineProps) => {
 
   const formatTime = (time: Date) => {
     return format(time, "HH:mm", {
-      locale: i18n.language === 'vi' ? vi : undefined
+      locale: i18n.language === 'vi' ? vi : enUS
     });
   };
 
@@ -53,9 +53,9 @@ export const Timeline = ({ feeds, onUpdateFeed }: TimelineProps) => {
     const minutes = differenceInMinutes(currentTime, previousTime) % 60;
 
     if (hours === 0) {
-      return t('timeLastFeed', { time: `${minutes} phút` });
+      return t('timeLastFeed', { time: t('minutesFormat', { minutes }) });
     }
-    return t('timeLastFeed', { time: `${hours} giờ ${minutes} phút` });
+    return t('timeLastFeed', { time: t('hoursMinutesFormat', { hours, minutes }) });
   };
 
   return (

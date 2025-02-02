@@ -42,5 +42,7 @@
   "data": "Quản Lý Dữ Liệu",
   "export": "Xuất",
   "import": "Nhập",
-  "invalidFile": "Định dạng tệp không hợp lệ. Vui lòng tải lên tệp JSON đúng định dạng."
+  "invalidFile": "Định dạng tệp không hợp lệ. Vui lòng tải lên tệp JSON đúng định dạng.",
+  "minutesFormat": "{{minutes}} phút",
+  "hoursMinutesFormat": "{{hours}} giờ {{minutes}} phút"
 }
