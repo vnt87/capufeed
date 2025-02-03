@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useName } from "@/contexts/NameContext";
 import { ShieldAlert, AlertTriangle } from "lucide-react";
@@ -15,6 +15,55 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
   const [elapsedTime, setElapsedTime] = useState("00:00:00");
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
+  const notificationPermission = useRef<NotificationPermission | null>(null);
+  const alertNotificationSent = useRef(false);
+  const dangerNotificationSent = useRef(false);
+
+  useEffect(() => {
+    // Request notification permission on component mount
+    if ('Notification' in window) {
+      Notification.requestPermission().then(permission => {
+        notificationPermission.current = permission;
+      });
+    }
+  }, []);
+
+  const sendNotification = useCallback((title: string, body: string) => {
+    if (notificationPermission.current !== 'granted') return;
+    
+    // Only send notification if the page is not visible
+    if (document.visibilityState !== 'visible') {
+      const notification = new Notification(title, {
+        body,
+        icon: '/icons/icon-192x192.png',
+        badge: '/icons/icon-192x192.png',
+        vibrate: [200, 100, 200]
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    // Send notifications when thresholds are crossed
+    if (hours >= 4 && !dangerNotificationSent.current) {
+      sendNotification(
+        t('timerDangerNotificationTitle', { name }),
+        t('timerDangerTooltip', { name })
+      );
+      dangerNotificationSent.current = true;
+    } else if ((hours + minutes / 60) >= 2.75 && !alertNotificationSent.current) {
+      sendNotification(
+        t('timerAlertNotificationTitle'),
+        t('timerAlertTooltip')
+      );
+      alertNotificationSent.current = true;
+    }
+
+    // Reset notification flags if time goes below thresholds
+    if ((hours + minutes / 60) < 2.75) {
+      alertNotificationSent.current = false;
+      dangerNotificationSent.current = false;
+    }
+  }, [hours, minutes, sendNotification, t, name]);
 
   const updateTimer = useCallback(() => {
     const now = new Date();

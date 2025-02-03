@@ -44,5 +44,7 @@
   "import": "Import",
   "invalidFile": "Invalid file format. Please upload a valid timeline JSON file.",
   "minutesFormat": "{{minutes}} minutes",
-  "hoursMinutesFormat": "{{hours}} hours {{minutes}} minutes"
+  "hoursMinutesFormat": "{{hours}} hours {{minutes}} minutes",
+  "timerAlertNotificationTitle": "Feeding Time Alert",
+  "timerDangerNotificationTitle": "{{name}} Needs Feeding!"
 }
