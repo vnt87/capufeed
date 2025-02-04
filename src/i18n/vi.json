@@ -46,5 +46,7 @@
   "minutesFormat": "{{minutes}} phút",
   "hoursMinutesFormat": "{{hours}} giờ {{minutes}} phút",
   "timerAlertNotificationTitle": "Đến Giờ Cho Bú",
-  "timerDangerNotificationTitle": "{{name}} Cần Bú!"
+  "timerDangerNotificationTitle": "{{name}} Cần Bú!",
+  "hourlyMode": "Theo Giờ",
+  "dailyMode": "Theo Ngày"
 }

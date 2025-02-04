@@ -46,5 +46,7 @@
   "minutesFormat": "{{minutes}} minutes",
   "hoursMinutesFormat": "{{hours}} hours {{minutes}} minutes",
   "timerAlertNotificationTitle": "Feeding Time Alert",
-  "timerDangerNotificationTitle": "{{name}} Needs Feeding!"
+  "timerDangerNotificationTitle": "{{name}} Needs Feeding!",
+  "hourlyMode": "Hourly",
+  "dailyMode": "Daily"
 }

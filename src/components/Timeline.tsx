@@ -22,11 +22,11 @@ interface TimelineProps {
 export const Timeline = ({ feeds, onUpdateFeed }: TimelineProps) => {
   const { t, i18n } = useTranslation();
   const now = new Date();
-  const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
+  const threeDaysAgo = new Date(now.getTime() - 72 * 60 * 60 * 1000);
   const [editingFeed, setEditingFeed] = useState<FeedRecord | null>(null);
 
   const recentFeeds = feeds
-    .filter(feed => feed.time > fortyEightHoursAgo)
+    .filter(feed => feed.time > threeDaysAgo)
     .sort((a, b) => b.time.getTime() - a.time.getTime());
 
   const formatTimeLabel = (time: Date) => {
