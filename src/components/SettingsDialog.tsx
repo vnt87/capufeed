@@ -115,8 +115,16 @@ export function SettingsDialog({
                   const blob = new Blob([JSON.stringify(serializedFeeds, null, 2)], { type: 'application/json' });
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement('a');
+                  
+                  // Format current date and time for filename
+                  const now = new Date();
+                  const dateString = now.toISOString()
+                    .replace(/[:.]/g, '-')
+                    .replace('T', '_')
+                    .slice(0, -5); // Remove milliseconds and timezone
+                    
                   a.href = url;
-                  a.download = 'timeline.json';
+                  a.download = `timeline_${dateString}.json`;
                   a.click();
                   URL.revokeObjectURL(url);
                 }}
