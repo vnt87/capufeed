@@ -3,7 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useTranslation } from 'react-i18next';
 import type { FeedRecord } from '@/types/feed';
 import type { TooltipProps } from 'recharts';
-import { format } from 'date-fns';
+import { format, subDays } from 'date-fns';
 import { Calendar, Clock } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
@@ -15,31 +15,37 @@ export const Chart: React.FC<ChartProps> = ({ feeds }) => {
   const { t } = useTranslation();
 
   const [mode, setMode] = useState<'hourly' | 'daily'>('hourly');
-  
+
   // Get the last 3 days for display
   const last3Days = Array.from({ length: 3 }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() - i);
-    return date.toLocaleDateString();
+    return date;
   });
 
   // Calculate stats for each day
-  const dailyStats = last3Days.map(date => {
+  const dailyStats = last3Days.reverse().map(date => { // Reverse for chronological order
+    const dateString = date.toLocaleDateString();
     const stats = feeds.reduce(
       (acc, feed) => {
-        if (feed.time.toLocaleDateString() === date) {
+        if (feed.time.toLocaleDateString() === dateString) {
           acc.totalAmount += feed.amount;
           acc.feedCount += 1;
         }
         return acc;
       },
-      { totalAmount: 0, feedCount: 0, date }
+      { totalAmount: 0, feedCount: 0, date: dateString } // Use dateString for calculation
     );
-    return stats;
+
+    // Display "Today" for the current date
+    const displayDate = dateString === new Date().toLocaleDateString() ? t('today') : dateString;
+    return { ...stats, date: displayDate }; // Override date for display
   });
 
   const getHourlyData = (feeds: FeedRecord[]) => {
+    const fiveDaysAgo = subDays(new Date(), 5);
     return [...feeds]
+      .filter(feed => feed.time >= fiveDaysAgo)
       .reverse()
       .map(feed => ({
         time: feed.time.toLocaleTimeString(),
@@ -115,8 +121,8 @@ export const Chart: React.FC<ChartProps> = ({ feeds }) => {
   const chartData = mode === 'hourly' ? getHourlyData(feeds) : getDailyData(feeds);
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-3 gap-4">
+    <div className="space-y-6 mt-8 mb-8">
+      <div className="grid grid-cols-3 gap-6">
         {dailyStats.map(({ date, totalAmount, feedCount }) => (
           <div key={date} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow text-center space-y-2">
             <h3 className="font-medium flex items-center justify-center gap-2">
