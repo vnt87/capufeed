@@ -22,7 +22,7 @@ const App = () => (
             <Header />
             <Toaster />
             <Sonner />
-            <div className="pb-32"> {/* Add padding to prevent content from being hidden under footer */}
+            <div className="min-h-full"> {/* Ensure full height for the content area */}
               <Routes>
                 <Route path="/" element={<Index />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

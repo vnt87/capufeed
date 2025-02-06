@@ -9,7 +9,7 @@ export function Footer() {
   return (
     <footer className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t">
       <div className="max-w-screen-xl mx-auto">
-        <div className="flex items-center justify-center gap-6">
+        <div className="flex items-center justify-center gap-2">
           <span className="text-center text-xs text-muted-foreground">
             Made with <Heart className="inline h-4 w-4 text-red-500" /> by{' '}
             <a

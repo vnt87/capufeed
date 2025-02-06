@@ -39,7 +39,7 @@ const Index = () => {
 
   if (feeds.length === 0) {
     return (
-      <div className="min-h-screen bg-baby-background dark:bg-gray-900 p-4 transition-colors">
+    <div className="min-h-full bg-baby-background dark:bg-gray-900 p-4 pb-20 transition-colors">
         <div className="flex items-center justify-center h-full">
           <div className="text-gray-600 dark:text-gray-400">Loading...</div>
         </div>
@@ -48,7 +48,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-baby-background dark:bg-gray-900 p-4 transition-colors">
+    <div className="min-h-full bg-baby-background dark:bg-gray-900 p-4 pb-20 transition-colors">
       <Header />
       <div className="max-w-md mx-auto space-y-8">
         <h1 className="text-3xl font-bold text-center text-baby-purple dark:text-purple-400 mt-8">
