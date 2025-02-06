@@ -1,37 +1,37 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import type { FeedRecord, FeedRecordUpdate } from '../../../src/types/feed';
-
-interface DbFeed {
-  id: string;
-  time: number;
-  amount: number;
-}
+import { FeedsDb } from './db';
 
 type Bindings = {
-  DB: D1Database;
+  DATABASE_URL: string;
 };
 
-const app = new Hono<{ Bindings: Bindings }>();
+type Variables = {
+  dbInitialized: boolean;
+};
+
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 // Enable CORS for all routes
 app.use('*', cors());
 
+// Initialize database
+import type { MiddlewareHandler } from 'hono';
+
+async function initDb(c: Parameters<MiddlewareHandler<{ Bindings: Bindings; Variables: Variables }>>[0]) {
+  await FeedsDb.init();
+  c.set('dbInitialized', true);
+}
+
 // GET /api/feeds - Get all feeds
 app.get('/', async (c) => {
   try {
-    const result = await c.env.DB
-      .prepare('SELECT * FROM feeds ORDER BY time DESC')
-      .all<DbFeed>();
-    
-    const feeds = (result.results || []).map(row => ({
-      id: row.id,
-      time: new Date(row.time),
-      amount: row.amount
-    }));
-
+    if (!c.get('dbInitialized')) await initDb(c);
+    const feeds = await FeedsDb.getAll();
     return c.json(feeds);
   } catch (error) {
+    console.error('Failed to fetch feeds:', error);
     return c.json({ error: 'Failed to fetch feeds' }, 500);
   }
 });
@@ -39,15 +39,12 @@ app.get('/', async (c) => {
 // POST /api/feeds - Create new feed
 app.post('/', async (c) => {
   try {
+    if (!c.get('dbInitialized')) await initDb(c);
     const data = await c.req.json<FeedRecord>();
-    
-    await c.env.DB
-      .prepare('INSERT INTO feeds (id, time, amount) VALUES (?, ?, ?)')
-      .bind(data.id, data.time.getTime(), data.amount)
-      .run();
-
-    return c.json(data, 201);
+    const feed = await FeedsDb.add(data);
+    return c.json(feed, 201);
   } catch (error) {
+    console.error('Failed to create feed:', error);
     return c.json({ error: 'Failed to create feed' }, 500);
   }
 });
@@ -55,28 +52,10 @@ app.post('/', async (c) => {
 // PUT /api/feeds/:id - Update feed
 app.put('/:id', async (c) => {
   try {
+    if (!c.get('dbInitialized')) await initDb(c);
     const id = c.req.param('id');
     const updates = await c.req.json<FeedRecordUpdate>();
-    
-    const sets: string[] = [];
-    const values: (number | string)[] = [];
-
-    if (updates.time) {
-      sets.push('time = ?');
-      values.push(updates.time.getTime());
-    }
-    if (typeof updates.amount !== 'undefined') {
-      sets.push('amount = ?');
-      values.push(updates.amount);
-    }
-
-    if (sets.length > 0) {
-      values.push(id);
-      await c.env.DB
-        .prepare(`UPDATE feeds SET ${sets.join(', ')} WHERE id = ?`)
-        .bind(...values)
-        .run();
-    }
+    await FeedsDb.update(id, updates);
 
     return c.json({ success: true });
   } catch (error) {

@@ -1,8 +1,2 @@
 compatibility_date = "2024-01-31"
 compatibility_flags = ["nodejs_compat"]
-
-# Database binding
-[[d1_databases]]
-binding = "DB"
-database_name = "capufeed"
-database_id = "fab1ed3b-4c36-4378-bb46-01ec787a9a7e"
