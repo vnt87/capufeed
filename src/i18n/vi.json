@@ -1,5 +1,5 @@
 {
-  "currentTime": "Thời Gian",
+  "currentTime": "Bây giờ là",
   "title": "Cho {{name}} Bú",
   "timeSinceLastFeed": "Thời gian từ lần bú cuối",
   "feedButton": "Cho bú",
@@ -25,7 +25,7 @@
   "pleaseEnterValidTime": "Vui lòng nhập thời gian hợp lệ (không ở tương lai)",
   "updateSuccess": "Đã cập nhật thành công",
   "updateError": "Cập nhật không thành công",
-  "timerAlertTooltip": "Đã qua 2 tiếng! Nhớ hâm nóng bình sữa!",
+  "timerAlertTooltip": "Đã qua 2 tiếng 45 phút! Nhớ hâm nóng bình sữa!",
   "timerDangerTooltip": "Đã qua 4 tiếng! {{name}} đã bú chưa?",
   "chart": "Biểu Đồ",
   "totalAmount": "Tổng: {{amount}}ml",
@@ -48,5 +48,7 @@
   "timerAlertNotificationTitle": "Đến Giờ Cho Bú",
   "timerDangerNotificationTitle": "{{name}} Cần Bú!",
   "hourlyMode": "Theo Giờ",
-  "dailyMode": "Theo Ngày"
+  "dailyMode": "Theo Ngày",
+  "timeUntilNextFeed": "Thời gian đến lần bú kế (dự kiến)",
+  "timeToFeed": "Đến giờ cho bú!"
 }

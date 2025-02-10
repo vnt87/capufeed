@@ -55,7 +55,7 @@ const Index = () => {
       <CurrentTime />
       <div className="flex-1 max-w-md mx-auto w-full px-4 pb-[calc(72px+theme(spacing.32))]">
         <div className="space-y-8">
-          <h1 className="text-3xl font-bold text-center text-baby-purple dark:text-purple-400 mt-8">
+          <h1 className="text-3xl font-bold text-center text-baby-purple dark:text-purple-400 mt-16">
             {t('title', { name })}
           </h1>
           

@@ -79,3 +79,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes pulse-text {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.pulse {
+  animation: pulse-text 2s ease-in-out infinite;
+}

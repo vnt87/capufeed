@@ -25,7 +25,7 @@
   "pleaseEnterValidTime": "Please enter a valid time (not in the future)",
   "updateSuccess": "Record updated successfully",
   "updateError": "Failed to update record",
-  "timerAlertTooltip": "2 hours passed! Time to warm the bottle!",
+  "timerAlertTooltip": "2 hours and 45 minutes passed! Time to warm the bottle!",
   "timerDangerTooltip": "4 hours passed! Has {{name}} been fed?",
   "chart": "Chart",
   "totalAmount": "Total: {{amount}}ml",
@@ -48,5 +48,7 @@
   "timerAlertNotificationTitle": "Feeding Time Alert",
   "timerDangerNotificationTitle": "{{name}} Needs Feeding!",
   "hourlyMode": "Hourly",
-  "dailyMode": "Daily"
+  "dailyMode": "Daily",
+  "timeUntilNextFeed": "Time until next feed (est.)",
+  "timeToFeed": "Time to feed!"
 }

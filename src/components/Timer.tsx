@@ -98,7 +98,22 @@ export const Timer = ({ lastFeedTime, children }: TimerProps) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="text-center mb-4">
+      <CircularProgress 
+        value={progressValue} 
+        size={280} 
+        strokeWidth={12}
+        className={cn(
+          hours >= 4 ? "text-destructive" :
+          (hours + minutes / 60) >= 2.75 ? "text-amber-500" :
+          "text-baby-purple"
+        )}
+      >
+        <div className="flex flex-col items-center z-10">
+          {children}
+        </div>
+      </CircularProgress>
+
+      <div className="text-center mt-6">
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
           {t("timeSinceLastFeed")}
         </p>
@@ -114,13 +129,7 @@ export const Timer = ({ lastFeedTime, children }: TimerProps) => {
         </div>
       </div>
 
-      <CircularProgress value={progressValue} size={280} strokeWidth={12}>
-        <div className="flex flex-col items-center z-10">
-          {children}
-        </div>
-      </CircularProgress>
-
-      <div className="mt-6">
+      <div className="mt-4">
         {hours >= 4 ? (
           <Badge variant="destructive">
             <AlertTriangle className="h-4 w-4 mr-1" />

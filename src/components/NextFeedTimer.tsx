@@ -41,16 +41,22 @@ export function NextFeedTimer({ lastFeedTime }: NextFeedTimerProps) {
     return () => clearInterval(interval);
   }, [updateTimer]);
 
+  if (isOverdue) {
+    return (
+      <div className="text-center">
+        <div className="text-3xl md:text-4xl font-bold tracking-wider text-destructive pulse">
+          {t('timeToFeed')}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="text-center">
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-        {isOverdue ? t('feedingOverdue') : "Time until next feed (est.)"}
+        {t('timeUntilNextFeed')}
       </p>
-      <div
-        className={`text-4xl md:text-5xl font-bold tracking-wider ${
-          isOverdue ? "text-destructive" : "text-baby-purple dark:text-purple-400"
-        }`}
-      >
+      <div className="text-4xl md:text-5xl font-bold tracking-wider text-baby-purple dark:text-purple-400">
         {timeUntilNext}
       </div>
     </div>
