@@ -122,7 +122,7 @@ export const Chart: React.FC<ChartProps> = ({ feeds }) => {
 
   return (
     <div className="space-y-6 mt-8 mb-8">
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-1">
         {dailyStats.map(({ date, totalAmount, feedCount }) => (
           <div key={date} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow text-center space-y-2">
             <h3 className="font-medium flex items-center justify-center gap-2">

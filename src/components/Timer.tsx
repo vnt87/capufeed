@@ -3,18 +3,21 @@ import { useTranslation } from "react-i18next";
 import { useName } from "@/contexts/NameContext";
 import { ShieldAlert, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { CircularProgress } from "@/components/ui/circular-progress";
 import { cn } from "@/lib/utils";
 
 interface TimerProps {
   lastFeedTime: Date;
+  children?: React.ReactNode;
 }
 
-export const Timer = ({ lastFeedTime }: TimerProps) => {
+export const Timer = ({ lastFeedTime, children }: TimerProps) => {
   const { t } = useTranslation();
   const { name } = useName();
   const [elapsedTime, setElapsedTime] = useState("00:00:00");
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
+  const [progressValue, setProgressValue] = useState(0);
   const notificationPermission = useRef<NotificationPermission | null>(null);
   const alertNotificationSent = useRef(false);
   const dangerNotificationSent = useRef(false);
@@ -33,11 +36,10 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
     
     // Only send notification if the page is not visible
     if (document.visibilityState !== 'visible') {
-      const notification = new Notification(title, {
+      new Notification(title, {
         body,
         icon: '/icons/icon-192x192.png',
-        badge: '/icons/icon-192x192.png',
-        vibrate: [200, 100, 200]
+        badge: '/icons/icon-192x192.png'
       });
     }
   }, []);
@@ -73,8 +75,13 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
+    // Calculate progress percentage (4 hours = 100%)
+    const totalMinutes = hours * 60 + minutes;
+    const progressPercent = Math.min((totalMinutes / (4 * 60)) * 100, 100);
+    
     setHours(hours);
     setMinutes(minutes);
+    setProgressValue(progressPercent);
     setElapsedTime(
       `${hours.toString().padStart(2, "0")}:${minutes
         .toString()
@@ -91,28 +98,41 @@ export const Timer = ({ lastFeedTime }: TimerProps) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div
-        className={cn(
-          "text-5xl md:text-6xl font-bold tracking-wider",
-          hours >= 4 ? "text-destructive" :
-          (hours + minutes / 60) >= 2.75 ? "text-amber-500" :
-          "text-baby-purple"
-        )}
-      >
-        {elapsedTime}
+      <div className="text-center mb-4">
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+          {t("timeSinceLastFeed")}
+        </p>
+        <div
+          className={cn(
+            "text-4xl md:text-5xl font-bold tracking-wider",
+            hours >= 4 ? "text-destructive" :
+            (hours + minutes / 60) >= 2.75 ? "text-amber-500" :
+            "text-baby-purple"
+          )}
+        >
+          {elapsedTime}
+        </div>
       </div>
-      
-      {hours >= 4 ? (
-        <Badge variant="destructive" className="mt-2">
-          <AlertTriangle className="h-4 w-4 mr-1" />
-          {t("timerDangerTooltip", { name })}
-        </Badge>
-      ) : (hours + minutes / 60) >= 2.75 ? (
-        <Badge variant="default" className="mt-2 bg-amber-500 text-white">
-          <ShieldAlert className="h-4 w-4 mr-1" />
-          {t("timerAlertTooltip")}
-        </Badge>
-      ) : null}
+
+      <CircularProgress value={progressValue} size={280} strokeWidth={12}>
+        <div className="flex flex-col items-center z-10">
+          {children}
+        </div>
+      </CircularProgress>
+
+      <div className="mt-6">
+        {hours >= 4 ? (
+          <Badge variant="destructive">
+            <AlertTriangle className="h-4 w-4 mr-1" />
+            {t("timerDangerTooltip", { name })}
+          </Badge>
+        ) : (hours + minutes / 60) >= 2.75 ? (
+          <Badge variant="default" className="bg-amber-500 text-white">
+            <ShieldAlert className="h-4 w-4 mr-1" />
+            {t("timerAlertTooltip")}
+          </Badge>
+        ) : null}
+      </div>
     </div>
   );
 };

@@ -16,11 +16,8 @@ export function CurrentTime() {
   }, []);
 
   return (
-    <div className="space-y-1">
-      <p className="text-gray-600 dark:text-gray-400">
-        {t("currentTime")}
-      </p>
-      <div className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+    <div className="absolute top-4 left-4">
+      <div className="text-sm text-gray-500 dark:text-gray-400">
         {format(time, "PPpp", {
           locale: i18n.language === 'vi' ? vi : enUS
         })}

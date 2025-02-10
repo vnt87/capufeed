@@ -7,7 +7,7 @@ export function Footer() {
   const { t } = useTranslation();
   const { name } = useName();
   return (
-    <footer className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t">
+    <footer className="p-4 bg-background border-t">
       <div className="max-w-screen-xl mx-auto">
         <div className="flex items-center justify-center gap-2">
           <span className="text-center text-xs text-muted-foreground">

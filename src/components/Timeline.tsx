@@ -59,7 +59,7 @@ export const Timeline = ({ feeds, onUpdateFeed }: TimelineProps) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto mt-8">
+    <div className="w-full">
       <h2 className="text-xl font-semibold mb-6 text-baby-purple dark:text-purple-400">
         {t('recentFeeds')}
       </h2>
