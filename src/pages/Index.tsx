@@ -91,8 +91,8 @@ const Index = () => {
         />
       </div>
 
-      <div className="fixed bottom-[72px] left-0 right-0 p-4 bg-baby-background dark:bg-gray-900">
-        <div className="max-w-md mx-auto">
+      <div className="fixed bottom-[72px] left-0 right-0 p-4">
+        <div className="max-w-md mx-auto bg-background/50 backdrop-blur-sm shadow-sm rounded-full">
           <Button
             onClick={() => setFeedDialogOpen(true)}
             className="w-full bg-baby-blue hover:bg-baby-purple dark:bg-blue-600 dark:hover:bg-purple-600 text-white py-6 text-xl rounded-full transition-colors flex items-center gap-2 justify-center shadow-lg"
